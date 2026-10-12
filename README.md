@@ -53,6 +53,17 @@ Received files are saved, copied to the clipboard, and announced in a notificati
 
 A shared link arrives as a `.url` or `.webloc` file. Clicking its notification, or double-clicking it in Files, opens it in your browser. Only `http` and `https` links open; a link to anything else, such as `file://` or `smb://`, is refused with a notification, because it was chosen by whoever sent it.
 
+## Lucid chat
+
+This computer is the AirDrop receiver. Lucid's server does not join the Wi-Fi link.
+
+```bash
+omdrop on 15          # visible to nearby Apple devices
+omdrop lucid on       # listen on 127.0.0.1 and print a code
+```
+
+Paste the code into Lucid and turn on AirDrop for the open chat. Each file that lands here is offered to that page: the file name, its size, and a short excerpt when the file is text. The file stays in the download folder on this computer. `omdrop lucid off` stops the page's listener. `omdrop lucid status` prints the code again.
+
 ## Send files
 
 Expand **Send to peers**, or press `n` in the panel. If Omdrop is off, this turns it on, because the receive window is what hears nearby devices.

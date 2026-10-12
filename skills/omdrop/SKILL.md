@@ -63,7 +63,13 @@ omdrop on 10m                   # receive for 10 minutes ("forever", "once")
 omdrop off                      # stop; refuses while a send is running
 omdrop peers -n                 # nearby devices, with names
 omdrop dir                      # where received files land (~/Downloads)
+omdrop lucid on                 # offer arrivals to Lucid chat on THIS device
 ```
+
+`omdrop lucid on` listens on 127.0.0.1 and prints a code. The user pastes that
+code into Lucid. Received files stay on this computer. Lucid's server is not
+the AirDrop receiver. Do this only when the user asked to drop a file into a
+Lucid chat.
 
 Turning Omdrop on makes this computer visible to nearby devices. Do that only
 when the user asks to receive, or as part of a send they asked for. Received

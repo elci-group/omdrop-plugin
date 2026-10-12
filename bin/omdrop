@@ -217,6 +217,10 @@ omdrop -- send and receive files with nearby Apple devices
   open-link FILE    open a .url or .webloc link in the browser (web links only)
   skill ACTION      install or remove the skill that tells AI agents how to
                     use omdrop (nothing else installs it)
+  lucid [on|off|status]
+                    hand received files to Lucid chat on this device.
+                    `on` listens on 127.0.0.1 and prints a code to paste
+                    into Lucid. The file stays on this computer.
   version           the plugin version, for bug reports
 
 Aliases, if you reach for a different word:
@@ -2579,9 +2583,27 @@ cmd_act() {
 
 # One behaviour for every arrival: save, copy, announce. Opening is left to a
 # click on the notification, so nothing runs on the user's behalf unasked.
+# Best effort. A missing Lucid bridge leaves the ordinary save-and-notify path
+# alone. The bridge reads the file here and sends the name and an excerpt, not
+# a path the page could turn into a read of some other file.
+lucid_note() {
+  [[ -f ${1:-} ]] || return 0
+  python3 "$PROJ/bin/lucid_chat.py" note -- "$1" || true
+}
+
+cmd_lucid() {
+  case "${1:-status}" in
+    on)     python3 "$PROJ/bin/lucid_chat.py" serve ;;
+    off)    python3 "$PROJ/bin/lucid_chat.py" off ;;
+    status|code) python3 "$PROJ/bin/lucid_chat.py" status ;;
+    *) die "usage: omdrop lucid [on|off|status]" ;;
+  esac
+}
+
 cmd_handle() {
   local f=${1:?usage: omdrop handle FILE}
   act_notify "$f"
+  lucid_note "$f"
 }
 
 # Nautilus's chooser, or the desktop portal's where Nautilus is absent. Prints
@@ -2817,6 +2839,7 @@ case "${1:-status}" in
   act)    shift; cmd_act "$@" ;;
   watch)  shift; cmd_watch "$@" ;;
   handle) shift; cmd_handle "$@" ;;
+  lucid)  shift; cmd_lucid "$@" ;;
   -V|--version|version) printf 'omdrop %s\n' "$(omdrop_version)" ;;
   -h|--help|help) usage ;;
   *)      usage >&2; exit 1 ;;
