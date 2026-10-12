@@ -117,6 +117,23 @@ class BridgeTests(unittest.TestCase):
             origin="https://example.test",
         )
         self.assertEqual(status, 403)
+        for origin in (
+            "https://dreamsequence.pro.example.test",
+            "https://notdreamsequence.pro",
+            "http://dreamsequence.pro",
+        ):
+            status, _ = self._request("/v1/health", origin=origin)
+            self.assertEqual(status, 403, origin)
+
+    def test_dreamsequence_pages_may_ask_this_device(self):
+        for origin in (
+            "https://dreamsequence.pro",
+            "https://www.dreamsequence.pro",
+            "https://lucid.dreamsequence.pro",
+        ):
+            status, raw = self._request("/v1/health", origin=origin)
+            self.assertEqual(status, 200, origin)
+            self.assertIn(b"client", raw)
 
     def test_note_posts_the_file_and_a_missing_bridge_is_quiet(self):
         path = Path("/tmp") / f"omdrop-lucid-note-{os.getpid()}.txt"

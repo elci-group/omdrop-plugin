@@ -2,10 +2,10 @@
 """Hand AirDrop arrivals to Lucid chat on this computer.
 
 The receiver is this device. Lucid's server never joins the AirDrop link.
-``omdrop lucid on`` listens on 127.0.0.1. The Lucid page on this same
-computer polls it with the pairing code printed at start. A file stays on
-this device. The page receives the file name, its size, and a short text
-excerpt when the bytes are text.
+``omdrop lucid on`` listens on 127.0.0.1. Ask Dreamsequence, the signed-in
+Dreamsequence assistant, and Lucid poll it from this same computer with the
+pairing code printed at start. A file stays on this device. The page receives
+the file name, its size, and a short text excerpt when the bytes are text.
 """
 
 from __future__ import annotations
@@ -28,7 +28,19 @@ DEFAULT_PORT = 8772
 EXCERPT_BYTES = 32_000
 LINK_BYTES = 65_536
 MAX_DROPS = 50
-ALLOWED_ORIGIN = "https://lucid.dreamsequence.pro"
+
+
+def origin_allowed(origin: str) -> bool:
+    """Missing Origin is a local tool. A page must be this machine or Dreamsequence."""
+    if not origin:
+        return True
+    parts = urlsplit(origin)
+    host = (parts.hostname or "").lower().rstrip(".")
+    if parts.scheme in ("http", "https") and host in ("127.0.0.1", "localhost"):
+        return True
+    if parts.scheme != "https" or parts.username or parts.password:
+        return False
+    return host == "dreamsequence.pro" or host.endswith(".dreamsequence.pro")
 
 
 def runtime_path() -> Path:
@@ -165,18 +177,6 @@ class Inbox:
             except (TypeError, ValueError):
                 floor = 0
             return [drop for drop in self._drops if int(drop["id"]) > floor]
-
-
-def origin_allowed(origin: str) -> bool:
-    if not origin:
-        return True
-    if origin == ALLOWED_ORIGIN:
-        return True
-    parts = urlsplit(origin)
-    return (
-        parts.scheme in ("http", "https")
-        and parts.hostname in ("127.0.0.1", "localhost")
-    )
 
 
 def _token_ok(presented: str, expected: str) -> bool:

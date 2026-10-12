@@ -218,9 +218,9 @@ omdrop -- send and receive files with nearby Apple devices
   skill ACTION      install or remove the skill that tells AI agents how to
                     use omdrop (nothing else installs it)
   lucid [on|off|status]
-                    hand received files to Lucid chat on this device.
-                    `on` listens on 127.0.0.1 and prints a code to paste
-                    into Lucid. The file stays on this computer.
+                    hand received files to Dreamsequence or Lucid on this device.
+                    `on` listens on 127.0.0.1 and prints a code.
+                    The file stays on this computer.
   version           the plugin version, for bug reports
 
 Aliases, if you reach for a different word:

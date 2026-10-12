@@ -67,9 +67,9 @@ omdrop lucid on                 # offer arrivals to Lucid chat on THIS device
 ```
 
 `omdrop lucid on` listens on 127.0.0.1 and prints a code. The user pastes that
-code into Lucid. Received files stay on this computer. Lucid's server is not
-the AirDrop receiver. Do this only when the user asked to drop a file into a
-Lucid chat.
+code into Ask Dreamsequence, the signed-in Dreamsequence assistant, or Lucid,
+on this same computer. Received files stay on this computer. Do this only when
+the user asked to drop a file into one of those chats.
 
 Turning Omdrop on makes this computer visible to nearby devices. Do that only
 when the user asks to receive, or as part of a send they asked for. Received
